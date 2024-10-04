@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+</head>
+<body>
+    <h1>Formulario de Usuario</h1>
+    <form action="FormularioNifMovil2.php" method="POST">
+        <label for="dni">NIF (DNI):</label>
+        <input type="text" id="dni" name="dni" required><br><br>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" required><br><br>
+
+        <label for="estado_social">Estado Social:</label>
+        <select id="estado_social" name="estado_social" required>
+            <option value="Soltero">Soltero</option>
+            <option value="Casado">Casado</option>
+            <option value="Divorciado">Divorciado</option>
+            <option value="Viudo">Viudo</option>
+        </select><br><br>
+
+        <label>Tipo de vehículo:</label><br>
+        <input type="radio" id="coche" name="vehiculo" value="Coche" required>
+        <label for="coche">Coche</label><br>
+        <input type="radio" id="moto" name="vehiculo" value="Moto">
+        <label for="moto">Moto</label><br>
+        <input type="radio" id="bicicleta" name="vehiculo" value="Bicicleta">
+        <label for="bicicleta">Bicicleta</label><br>
+        <input type="radio" id="patinete" name="vehiculo" value="Patinete">
+        <label for="patinete">Patinete</label><br><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
