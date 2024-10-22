@@ -66,31 +66,35 @@
 
 <div class="container">
     <?php
-    session_start();
-
     // Inicializamos el número aleatorio y los intentos
-    if (!isset($_SESSION['numero'])) {
-        $_SESSION['numero'] = rand(1, 100);
-        $_SESSION['intentos'] = 0;
+    if (!isset($_POST['numero']) && !isset($_POST['intentos'])) {
+        $numeroAleatorio = rand(1, 100);
+        $intentos = 0;
+    } else {
+        $numeroAleatorio = (int)$_POST['numero'];
+        $intentos = (int)$_POST['intentos'];
     }
 
-    // Variables de sesión
-    $numeroAleatorio = $_SESSION['numero'];
-    $intentos = $_SESSION['intentos'];
+    // Verificamos si se ha enviado un número
+    if (isset($_POST['numeroUsuario'])) {
+        $numeroUsuario = (int)$_POST['numeroUsuario'];
+        $intentos++;
 
-    // Comprobamos si se ha enviado un número y si aún no se han superado los 6 intentos
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $intentos < 6) {
-        $numeroUsuario = (int) $_POST['numero'];
-        $_SESSION['intentos']++;
+        // Comprobamos si hemos superado los intentos
+        if ($intentos >= 6) {
+            echo "<h2>Lo siento, has agotado tus intentos.</h2>";
+            echo "<p class='fallo mensaje'>El número correcto era: $numeroAleatorio.</p>";
+            echo "<form method='post'><button type='submit' name='reset'>Jugar de nuevo</button></form>";
+            exit;
+        }
 
         // Verificamos si el número es correcto
         if ($numeroUsuario === $numeroAleatorio) {
-            echo "<h2>¡Felicidades! Has acertado el número en {$_SESSION['intentos']} intentos.</h2>";
+            echo "<h2>¡Felicidades! Has acertado el número en $intentos intentos.</h2>";
             echo "<p class='acierto mensaje'>El número era: $numeroAleatorio.</p>";
             echo "<form method='post'><button type='submit' name='reset'>Jugar de nuevo</button></form>";
-            session_destroy();
             exit;
-        } elseif (abs($numeroUsuario - $numeroAleatorio) < 5) {
+        } elseif ($numeroUsuario >= $numeroAleatorio - 5 && $numeroUsuario <= $numeroAleatorio + 5) {
             echo "<p class='calentito mensaje'>¡Calentito totalis!</p>";
         } elseif ($numeroUsuario < $numeroAleatorio) {
             echo "<p class='fallo mensaje'>El número es mayor.</p>";
@@ -99,27 +103,19 @@
         }
     }
 
-    // Verificamos el límite de intentos
-    if ($intentos >= 6) {
-        echo "<h2>Lo siento, has agotado tus intentos.</h2>";
-        echo "<p class='fallo mensaje'>El número correcto era: $numeroAleatorio.</p>";
-        echo "<form method='post'><button type='submit' name='reset'>Jugar de nuevo</button></form>";
-        session_destroy();
-        exit;
-    }
-
     // Reseteamos el juego
     if (isset($_POST['reset'])) {
-        session_destroy();
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit;
+        $numeroAleatorio = rand(1, 100);
+        $intentos = 0;
     }
     ?>
 
     <h2>Adivina el número (1-100)</h2>
-    <p>Intento: <?php echo $_SESSION['intentos']; ?> de 6</p>
+    <p>Intento: <?php echo $intentos; ?> de 6</p>
     <form method="post">
-        <input type="number" name="numero" min="1" max="100" required>
+        <input type="hidden" name="numero" value="<?php echo $numeroAleatorio; ?>">
+        <input type="hidden" name="intentos" value="<?php echo $intentos; ?>">
+        <input type="number" name="numeroUsuario" min="1" max="100" required>
         <br>
         <button type="submit">Enviar</button>
     </form>

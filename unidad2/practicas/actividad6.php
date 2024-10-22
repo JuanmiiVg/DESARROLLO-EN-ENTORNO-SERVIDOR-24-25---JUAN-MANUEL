@@ -27,11 +27,12 @@
 <div class="container">
     <h2>Piedra, Papel, Tijeras, Lagarto, Spock</h2>
     <form method="post">
-        <button type="submit" name="play">Jugar</button>
+        <button type="submit" name="jugar">Jugar</button>
     </form>
 
     <?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['play'])) {
+    // Verificar si se ha presionado el botón "Jugar"
+    if (isset($_POST['jugar'])) {
         $opciones = ["Piedra", "Papel", "Tijeras", "Lagarto", "Spock"];
         $ganadasJugador1 = 0;
         $ganadasJugador2 = 0;
