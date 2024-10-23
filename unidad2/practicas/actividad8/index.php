@@ -48,7 +48,7 @@
 
     <?php
     if (isset($_POST['header']) && isset($_POST['body']) && isset($_POST['footer']) && isset($_POST['style'])) {
-        // Obtener las selecciones del formulario
+        // Obtenemos las selecciones del formulario
         $header = $_POST['header'];
         $body = $_POST['body'];     
         $footer = $_POST['footer'];  
@@ -61,7 +61,7 @@
         $style = 'estilo/estilo1.css';
     }
 
-    // Incluir archivos seleccionados
+    // Incluimos archivos seleccionados
     echo '<link rel="stylesheet" href="' . $style . '">';
     include($header . '.php');
     include($body . '.php');

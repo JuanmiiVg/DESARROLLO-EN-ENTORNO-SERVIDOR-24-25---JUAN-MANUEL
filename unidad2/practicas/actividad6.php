@@ -31,13 +31,18 @@
     </form>
 
     <?php
-    // Verificar si se ha presionado el botón "Jugar"
+    // Verificamos si se ha presionado el botón "Jugar"
     if (isset($_POST['jugar'])) {
         $opciones = ["Piedra", "Papel", "Tijeras", "Lagarto", "Spock"];
-        $ganadasJugador1 = 0;
-        $ganadasJugador2 = 0;
-        $rondas = 3;
 
+        // Inicializamos el contador de victorias
+        $ganadasJugador1 = 0; 
+        $ganadasJugador2 = 0;
+
+        // Definimos el número de rondas a jugar
+        $rondas = 3; 
+        
+        // Función para determinar el ganador de cada ronda
         function determinarGanador($jugador1, $jugador2) {
             if ($jugador1 === $jugador2) return "empate";
 
@@ -56,7 +61,8 @@
         }
 
         echo "<div class='result'>";
-        for ($i = 1; $i <= $rondas; $i++) {
+        // Bucle para jugar las rondas definidas
+        for ($i = 1; $i <= $rondas; $i++) { 
             $manoJugador1 = $opciones[array_rand($opciones)];
             $manoJugador2 = $opciones[array_rand($opciones)];
 
@@ -64,6 +70,7 @@
             echo "<img src='img/{$manoJugador1}.png' alt='{$manoJugador1}'>";
             echo "<img src='img/{$manoJugador2}.png' alt='{$manoJugador2}'>";
 
+             // Determinamos el ganador de la ronda
             $resultado = determinarGanador($manoJugador1, $manoJugador2);
             if ($resultado === "jugador1") {
                 echo "<p>Ganador: Jugador 1</p>";
@@ -77,10 +84,10 @@
         }
         echo "</div>";
 
-        // Determinar el ganador al mejor de 3
+        // Determinamos el ganador al mejor de 3
         echo "<h3>";
         if ($ganadasJugador1 > $ganadasJugador2) {
-            echo "Jugador 1 gana la competición al mejor de 3.";
+            echo "Jugador 1 gana la competición al mejor de 3."; 
         } elseif ($ganadasJugador2 > $ganadasJugador1) {
             echo "Jugador 2 gana la competición al mejor de 3.";
         } else {

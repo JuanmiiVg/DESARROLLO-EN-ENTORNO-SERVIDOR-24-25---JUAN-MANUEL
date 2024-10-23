@@ -56,27 +56,25 @@
 
 <div class="container">
     <?php
-    // Función para lanzar una moneda al azar
-    function lanzarMoneda() {
-        return rand(0, 1) === 0 ? 'cara' : 'cruz';
+    // Simulamos tirada de monedas para los dos jugadores
+    $jugador1 = [];
+    $jugador2 = [];
+
+    // Lanzamos dos monedas para el jugador 1
+    for ($i = 0; $i < 2; $i++) {
+        $jugador1[$i] = rand(0, 1) === 0 ? 'cara' : 'cruz';
     }
 
-    // Función para simular la tirada de dos monedas
-    function tirarDosMonedas() {
-        $moneda1 = lanzarMoneda();
-        $moneda2 = lanzarMoneda();
-        return [$moneda1, $moneda2];
+    // Lanzamos dos monedas para el jugador 2
+    for ($i = 0; $i < 2; $i++) {
+        $jugador2[$i] = rand(0, 1) === 0 ? 'cara' : 'cruz';
     }
 
-    // Simular tiradas de los jugadores
-    $jugador1 = tirarDosMonedas();
-    $jugador2 = tirarDosMonedas();
-
-    // Determinar si algún jugador ha ganado
+    // Determinamos si algún jugador ha ganado
     $ganaJugador1 = ($jugador1[0] === 'cara' && $jugador1[1] === 'cara');
     $ganaJugador2 = ($jugador2[0] === 'cara' && $jugador2[1] === 'cara');
 
-    // Mostrar resultados
+    // Mostramos resultados
     echo "<h2>Tirada de los jugadores:</h2>";
     echo "<p>Jugador 1: " . $jugador1[0] . " y " . $jugador1[1] . "</p>";
     echo "<p>Jugador 2: " . $jugador2[0] . " y " . $jugador2[1] . "</p>";

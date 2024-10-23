@@ -44,86 +44,91 @@
 
 <div class="container">
     <?php
-    // Iniciar la sesión para almacenar la carta del medio
-    session_start();
+        // Definimos las cartas y colores posibles
+        $carta = array("1", "2", "3", "4", "5");
+        $color = array("Azul", "Rojo");
 
-    // Definimos los colores y números disponibles
-    $colores = ['Rojo', 'Azul'];
-    $numeros = [1, 2, 3, 4, 5];
-
-    // Función para generar una carta aleatoria
-    function generarCartaAleatoria($colores, $numeros) {
-        $color = $colores[array_rand($colores)];
-        $numero = $numeros[array_rand($numeros)];
-        return [
-            'color' => $color,
-            'numero' => $numero
-        ];
-    }
-
-    // Comprobar si se ha enviado el formulario para repetir la mano
-    if (isset($_POST['repetir'])) {
-        // Solo regenerar la mano del jugador
-        $mano = [];
-        for ($i = 0; $i < 4; $i++) {
-            $mano[] = generarCartaAleatoria($colores, $numeros);
-        }
-    } else {
-        // Generar la carta que sale en medio solo si no está en sesión
-        if (!isset($_SESSION['cartaMedio'])) {
-            $_SESSION['cartaMedio'] = generarCartaAleatoria($colores, $numeros);
-        }
-
-        // Generar la mano del jugador al cargar la página por primera vez
-        $mano = [];
-        for ($i = 0; $i < 4; $i++) {
-            $mano[] = generarCartaAleatoria($colores, $numeros);
-        }
-    }
-
-    // Comprobar si se ha enviado una carta válida
-    $mensaje = "";
-    if (isset($_POST['carta'])) {
-        $cartaSeleccionada = explode('_', $_POST['carta']); // Formato: numero_color
-        $numeroSeleccionado = $cartaSeleccionada[0];
-        $colorSeleccionado = $cartaSeleccionada[1];
-
-        // Comprobar si es una jugada válida
-        if ($numeroSeleccionado == $_SESSION['cartaMedio']['numero'] || $colorSeleccionado == $_SESSION['cartaMedio']['color']) {
-            // Generar una nueva carta del medio al seleccionar una carta válida
-            $_SESSION['cartaMedio'] = generarCartaAleatoria($colores, $numeros);
-            $mensaje = "<p class='felicitacion'>¡Felicidades! Has seleccionado una carta válida.</p>";
+        // Si no se ha enviado la carta del centro, o si se ha solicitado repetir, conservamos la carta del medio
+        if (!isset($_POST['carta_centro']) || isset($_POST['repetir'])) {
+            // Mantenemos la carta del centro original si se repite la mano
+            if (!isset($_POST['carta_centro'])) {
+                $carta_aleatoria = rand(0, 4);
+                $color_aleatoria = rand(0, 1);
+                $carta_centro = $carta[$carta_aleatoria];
+                $color_centro = $color[$color_aleatoria];
+            } else {
+                $carta_centro = $_POST['carta_centro'];
+                $color_centro = $_POST['color_centro'];
+            }
         } else {
-            $mensaje = "<p class='resultado'>Carta no válida. Inténtalo de nuevo.</p>";
+            $carta_centro = $_POST['carta_centro'];
+            $color_centro = $_POST['color_centro'];
         }
-    }
 
-    // Mostrar la carta que sale en medio
-    echo "<h2>Carta que sale en medio:</h2>";
-    echo "<div class='cartas'>";
-    echo "<img src='img/{$_SESSION['cartaMedio']['numero']}_{$_SESSION['cartaMedio']['color']}.png' alt='Carta en Medio'>";
-    echo "</div>";
+        // Comprobamos si se ha seleccionado una carta del jugador
+        $mensaje = "";
+        if (isset($_POST['carta_usuario'])) {
+            $carta_seleccionada = $_POST['carta_usuario'];
 
-    // Mostrar la mano del jugador
-    echo "<h2>Tu mano:</h2>";
-    echo "<form method='post'>";
-    echo "<div class='cartas'>";
-    foreach ($mano as $carta) {
-        $nombreCarta = "{$carta['numero']}_{$carta['color']}";
-        echo "<button type='submit' name='carta' value='{$nombreCarta}'>";
-        echo "<img src='img/{$nombreCarta}.png' alt='Carta'>"; // Aquí debería tener las imágenes de las cartas
-        echo "</button>";
-    }
-    echo "</div>";
-    echo "<button type='submit' name='repetir'>Repetir mano</button>";
-    echo "</form>";
+            // Verificamos si la carta seleccionada contiene el carácter "_"
+            if (strpos($carta_seleccionada, "_") !== false) {
+                list($numero, $color_jugador) = explode("_", $carta_seleccionada);
 
-    // Mostrar el mensaje si existe
-    if ($mensaje) {
-        echo "<div class='resultado'>$mensaje</div>";
-    }
+                // Verificamos si la carta seleccionada es válida
+                if ($numero == $carta_centro || $color_jugador == $color_centro) {
+                    $mensaje = "<p class='resultado felicitacion'>¡Felicidades! Jugada válida.</p>";
+                    // Cambiamos la carta del centro si la jugada es válida
+                    $carta_aleatoria = rand(0, 4);
+                    $color_aleatoria = rand(0, 1);
+                    $carta_centro = $carta[$carta_aleatoria];
+                    $color_centro = $color[$color_aleatoria];
+                } else {
+                    $mensaje = "<p class='resultado'>Carta no válida. Inténtalo de nuevo.</p>";
+                }
+            } else {
+                $mensaje = "<p class='resultado'>Error: Formato de carta inválido.</p>";
+            }
+        }
+
+        echo "<p>La carta del centro es:</p>";
+        echo "<img src='img/" . $carta_centro . "_" . $color_centro . ".png' alt='carta' class='img-fluid'>";
+
+        // Generamos las cartas del jugador
+        $mano_jugador = array();
+        for ($i = 0; $i < 4; $i++) {
+            $carta_random = rand(0, 4);
+            $color_random = rand(0, 1);
+            $mano_jugador[] = $carta[$carta_random] . "_" . $color[$color_random];
+        }
+    ?>
+
+    <div class="cartas">
+        <form method="post">
+            <input type="hidden" name="carta_centro" value="<?php echo $carta_centro; ?>">
+            <input type="hidden" name="color_centro" value="<?php echo $color_centro; ?>">
+            <?php
+                // Mostramos las cartas del jugador como botones
+                foreach ($mano_jugador as $carta_jugador) {
+                    echo "<button type='submit' name='carta_usuario' value='$carta_jugador'>";
+                    echo "<img src='img/$carta_jugador.png' alt='carta'>";
+                    echo "</button>";
+                }
+            ?>
+        </form>
+    </div>
+
+    <div>
+        <form method="post">
+            <input type="hidden" name="carta_centro" value="<?php echo $carta_centro; ?>">
+            <input type="hidden" name="color_centro" value="<?php echo $color_centro; ?>">
+            <button type="submit" name="repetir" class="btn btn-primary">Repetir mano</button>
+        </form>
+    </div>
+
+    <?php
+        // Mostramos el mensaje de resultado
+        echo $mensaje;
     ?>
 </div>
-
 </body>
 </html>

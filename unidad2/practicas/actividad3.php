@@ -56,12 +56,6 @@
 
 <div class="container">
     <?php
-    /* 
-    Escriba un programa que cada vez que se ejecute saque dos cartas de baraja de poker al azar 
-    y diga si ha salido una pareja de valores iguales y el mayor de los valores obtenidos. 
-    Mostrar las cartas con imágenes.
-    */
-
     // Definimos la baraja de cartas
     $palos = ['hearts', 'diamonds', 'clubs', 'spades'];
     $valores = [
@@ -70,46 +64,47 @@
         'king' => 13, 'ace' => 14
     ];
 
-    // Función para sacar una carta aleatoria
-    function sacarCartaAleatoria($palos, $valores) {
-        $palo = $palos[array_rand($palos)];
-        $nombreValor = array_rand($valores);
-        $valor = $valores[$nombreValor];
-        return [
-            'palo' => $palo,
-            'nombreValor' => $nombreValor,
-            'valor' => $valor
-        ];
-    }
+    // Sacamos la primera carta al azar
+    $indicePalo1 = array_rand($palos);
+    $nombreValor1 = array_rand($valores);
+    $valor1 = $valores[$nombreValor1];
+    $palo1 = $palos[$indicePalo1];
 
-    // Sacamos dos cartas al azar
-    $carta1 = sacarCartaAleatoria($palos, $valores);
-    $carta2 = sacarCartaAleatoria($palos, $valores);
+    // Sacamos la segunda carta al azar
+    $indicePalo2 = array_rand($palos);
+    $nombreValor2 = array_rand($valores);
+    $valor2 = $valores[$nombreValor2];
+    $palo2 = $palos[$indicePalo2];
 
-    // Determinamos si es una pareja
-    $esPareja = $carta1['valor'] === $carta2['valor'];
+    // Determinamos si son una pareja
+    $esPareja = ($valor1 === $valor2);
 
     // Determinamos la carta con el mayor valor
-    $cartaMayor = $carta1['valor'] >= $carta2['valor'] ? $carta1 : $carta2;
+    if ($valor1 >= $valor2) {
+        $nombreValorMayor = $nombreValor1;
+        $paloMayor = $palo1;
+    } else {
+        $nombreValorMayor = $nombreValor2;
+        $paloMayor = $palo2;
+    }
 
     // Mostramos los resultados
     echo "<h2>Cartas obtenidas:</h2>";
     echo "<div class='cartas'>";
-    echo "<img src='img/{$carta1['nombreValor']}_of_{$carta1['palo']}.png' alt='Carta 1'>";
-    echo "<img src='img/{$carta2['nombreValor']}_of_{$carta2['palo']}.png' alt='Carta 2'>";
+    echo "<img src='img/{$nombreValor1}_of_{$palo1}.png' alt='Carta 1'>";
+    echo "<img src='img/{$nombreValor2}_of_{$palo2}.png' alt='Carta 2'>";
     echo "</div>";
 
     echo "<div class='resultado'>";
     if ($esPareja) {
-        echo "<p class='pareja'>¡Es una pareja de {$carta1['nombreValor']}s!</p>";
+        echo "<p class='pareja'>¡Es una pareja de {$nombreValor1}s!</p>";
     } else {
         echo "<p class='no-pareja'>No es una pareja.</p>";
     }
     echo "</div>";
 
-    echo "<p class='valor-alto'>El valor más alto es: {$cartaMayor['nombreValor']} de {$cartaMayor['palo']}.</p>";
+    echo "<p class='valor-alto'>El valor más alto es: {$nombreValorMayor} de {$paloMayor}.</p>";
     ?>
 </div>
-
 </body>
 </html>
