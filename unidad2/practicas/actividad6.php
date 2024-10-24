@@ -63,14 +63,17 @@
         echo "<div class='result'>";
         // Bucle para jugar las rondas definidas
         for ($i = 1; $i <= $rondas; $i++) { 
-            $manoJugador1 = $opciones[array_rand($opciones)];
-            $manoJugador2 = $opciones[array_rand($opciones)];
+            // Generamos un valor aleatorio entre 0 y 4
+            $valorJugador1 = rand(0, 4);
+            $valorJugador2 = rand(0, 4);
+            $manoJugador1 = $opciones[$valorJugador1];
+            $manoJugador2 = $opciones[$valorJugador2];
 
             echo "<p>Ronda $i:</p>";
             echo "<img src='img/{$manoJugador1}.png' alt='{$manoJugador1}'>";
             echo "<img src='img/{$manoJugador2}.png' alt='{$manoJugador2}'>";
 
-             // Determinamos el ganador de la ronda
+            // Determinamos el ganador de la ronda
             $resultado = determinarGanador($manoJugador1, $manoJugador2);
             if ($resultado === "jugador1") {
                 echo "<p>Ganador: Jugador 1</p>";

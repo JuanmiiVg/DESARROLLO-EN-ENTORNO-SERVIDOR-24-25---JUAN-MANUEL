@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,58 +53,73 @@
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>Juego de Cartas</h2>
+        <?php
+        // Arrays para los valores y los palos
+        $valores = array('2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A');
+        $palos = array('hearts', 'diamonds', 'clubs', 'spades');
 
-<div class="container">
-    <?php
-    // Definimos la baraja de cartas
-    $palos = ['hearts', 'diamonds', 'clubs', 'spades'];
-    $valores = [
-        '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7,
-        '8' => 8, '9' => 9, '10' => 10, 'jack' => 11, 'queen' => 12,
-        'king' => 13, 'ace' => 14
-    ];
+        // Seleccionamos dos cartas al azar
+        $Valor1 = rand(0, 12);
+        $Palo1 = rand(0, 3);
 
-    // Sacamos la primera carta al azar
-    $indicePalo1 = array_rand($palos);
-    $nombreValor1 = array_rand($valores);
-    $valor1 = $valores[$nombreValor1];
-    $palo1 = $palos[$indicePalo1];
+        $Valor2 = rand(0, 12);
+        $Palo2 = rand(0, 3); 
 
-    // Sacamos la segunda carta al azar
-    $indicePalo2 = array_rand($palos);
-    $nombreValor2 = array_rand($valores);
-    $valor2 = $valores[$nombreValor2];
-    $palo2 = $palos[$indicePalo2];
+        // Nos aseguramos de que la segunda carta sea diferente de la primera
+        while ($Valor1 == $Valor2 && $Palo1 == $Palo2) {
+            $Valor2 = rand(0, 12);
+            $Palo2 = rand(0, 3);
+        }
 
-    // Determinamos si son una pareja
-    $esPareja = ($valor1 === $valor2);
+        // Determinamos si las cartas tienen el mismo valor
+        $esPareja = false;
+        if ($Valor1 == $Valor2) {
+            $esPareja = true;
+        }
 
-    // Determinamos la carta con el mayor valor
-    if ($valor1 >= $valor2) {
-        $nombreValorMayor = $nombreValor1;
-        $paloMayor = $palo1;
-    } else {
-        $nombreValorMayor = $nombreValor2;
-        $paloMayor = $palo2;
-    }
+        // Determinamos el valor mayor manualmente
+        $valorMayor = $valores[$Valor1];
+        if ($Valor2 > $Valor1) {
+            $valorMayor = $valores[$Valor2];
+        }
 
-    // Mostramos los resultados
-    echo "<h2>Cartas obtenidas:</h2>";
-    echo "<div class='cartas'>";
-    echo "<img src='img/{$nombreValor1}_of_{$palo1}.png' alt='Carta 1'>";
-    echo "<img src='img/{$nombreValor2}_of_{$palo2}.png' alt='Carta 2'>";
-    echo "</div>";
+        // Convertimos los valores especiales para el nombre de la imagen
+        function convertirValor($valor) {
+            switch ($valor) {
+                case 'J':
+                    return 'jack';
+                case 'Q':
+                    return 'queen';
+                case 'K':
+                    return 'king';
+                case 'A':
+                    return 'ace';
+                default:
+                    return $valor;
+            }
+        }
+        ?>
 
-    echo "<div class='resultado'>";
-    if ($esPareja) {
-        echo "<p class='pareja'>¡Es una pareja de {$nombreValor1}s!</p>";
-    } else {
-        echo "<p class='no-pareja'>No es una pareja.</p>";
-    }
-    echo "</div>";
+        <div class="cartas">
+            <div>
+                <p>Primera carta: <?php echo $valores[$Valor1] . " de " . $palos[$Palo1]; ?></p>
+                <img src="img/<?php echo convertirValor($valores[$Valor1]) . "_of_" . $palos[$Palo1]; ?>.png" alt="Primera carta">
+            </div>
+            <div>
+                <p>Segunda carta: <?php echo $valores[$Valor2] . " de " . $palos[$Palo2]; ?></p>
+                <img src="img/<?php echo convertirValor($valores[$Valor2]) . "_of_" . $palos[$Palo2]; ?>.png" alt="Segunda carta">
+            </div>
+        </div>
 
-    echo "<p class='valor-alto'>El valor más alto es: {$nombreValorMayor} de {$paloMayor}.</p>";
-    ?>
-</div>
+        <div class="resultado <?php echo $esPareja ? 'pareja' : 'no-pareja'; ?>">
+            <?php echo $esPareja ? '¡Es una pareja!' : 'No es una pareja.'; ?>
+        </div>
+
+        <div class="valor-alto">
+            <p>El valor mayor es: <?php echo $valorMayor; ?></p>
+        </div>
+    </div>
 </body>
 </html>
