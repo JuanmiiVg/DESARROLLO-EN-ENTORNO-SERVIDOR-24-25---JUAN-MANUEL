@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Cartas</title>
+    <title>Juego de Poker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,71 +54,54 @@
 </head>
 <body>
     <div class="container">
-        <h2>Juego de Cartas</h2>
-        <?php
-        // Arrays para los valores y los palos
-        $valores = array('2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A');
-        $palos = array('hearts', 'diamonds', 'clubs', 'spades');
-
-        // Seleccionamos dos cartas al azar
-        $Valor1 = rand(0, 12);
-        $Palo1 = rand(0, 3);
-
-        $Valor2 = rand(0, 12);
-        $Palo2 = rand(0, 3); 
-
-        // Nos aseguramos de que la segunda carta sea diferente de la primera
-        while ($Valor1 == $Valor2 && $Palo1 == $Palo2) {
-            $Valor2 = rand(0, 12);
-            $Palo2 = rand(0, 3);
-        }
-
-        // Determinamos si las cartas tienen el mismo valor
-        $esPareja = false;
-        if ($Valor1 == $Valor2) {
-            $esPareja = true;
-        }
-
-        // Determinamos el valor mayor manualmente
-        $valorMayor = $valores[$Valor1];
-        if ($Valor2 > $Valor1) {
-            $valorMayor = $valores[$Valor2];
-        }
-
-        // Convertimos los valores especiales para el nombre de la imagen
-        function convertirValor($valor) {
-            switch ($valor) {
-                case 'J':
-                    return 'jack';
-                case 'Q':
-                    return 'queen';
-                case 'K':
-                    return 'king';
-                case 'A':
-                    return 'ace';
-                default:
-                    return $valor;
-            }
-        }
-        ?>
-
+        <h2>Juego de Poker</h2>
         <div class="cartas">
-            <div>
-                <p>Primera carta: <?php echo $valores[$Valor1] . " de " . $palos[$Palo1]; ?></p>
-                <img src="img/<?php echo convertirValor($valores[$Valor1]) . "_of_" . $palos[$Palo1]; ?>.png" alt="Primera carta">
-            </div>
-            <div>
-                <p>Segunda carta: <?php echo $valores[$Valor2] . " de " . $palos[$Palo2]; ?></p>
-                <img src="img/<?php echo convertirValor($valores[$Valor2]) . "_of_" . $palos[$Palo2]; ?>.png" alt="Segunda carta">
-            </div>
-        </div>
+            <?php
+            // Arrays con los valores y palos de las cartas
+            $valores = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
+            $palos = ["hearts", "diamonds", "clubs", "spades"];
 
-        <div class="resultado <?php echo $esPareja ? 'pareja' : 'no-pareja'; ?>">
-            <?php echo $esPareja ? '¡Es una pareja!' : 'No es una pareja.'; ?>
-        </div>
+            // Generamos las dos cartas al azar
+            $valor1 = $valores[rand(0, count($valores) - 1)];
+            $palo1 = $palos[rand(0, count($palos) - 1)];
+            $valor2 = $valores[rand(0, count($valores) - 1)];
+            $palo2 = $palos[rand(0, count($palos) - 1)];
 
-        <div class="valor-alto">
-            <p>El valor mayor es: <?php echo $valorMayor; ?></p>
+            // Mostramos las cartas
+            echo "<img src='img/{$valor1}_of_{$palo1}.png' alt='Carta 1'>";
+            echo "<img src='img/{$valor2}_of_{$palo2}.png' alt='Carta 2'>";
+            ?>
+        </div>
+        <div class="resultado">
+            <?php
+            // Verificamos si son una pareja
+            if ($valor1 == $valor2) {
+                echo "<p class='pareja'>¡Es una pareja de {$valor1}s!</p>";
+            } else {
+                // Determinamos cuál es el mayor
+                $indice1 = 0;
+                $indice2 = 0;
+
+                // Encontrar los índices correspondientes de los valores
+                for ($i = 0; $i < count($valores); $i++) {
+                    if ($valores[$i] == $valor1) {
+                        $indice1 = $i;
+                    }
+                    if ($valores[$i] == $valor2) {
+                        $indice2 = $i;
+                    }
+                }
+
+                // Comparamos los índices para determinar el mayor
+                if ($indice1 > $indice2) {
+                    echo "<p class='no-pareja'>No es una pareja.</p>";
+                    echo "<p class='valor-alto'>La carta más alta es {$valor1} de {$palo1}.</p>";
+                } else {
+                    echo "<p class='no-pareja'>No es una pareja.</p>";
+                    echo "<p class='valor-alto'>La carta más alta es {$valor2} de {$palo2}.</p>";
+                }
+            }
+            ?>
         </div>
     </div>
 </body>

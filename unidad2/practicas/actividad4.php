@@ -37,6 +37,10 @@
         .perdedor {
             color: red;
         }
+        .moneda {
+            width: 50px;
+            height: auto;
+        }
         button {
             background-color: #4CAF50;
             color: white;
@@ -74,10 +78,19 @@
     $ganaJugador1 = ($jugador1[0] === 'cara' && $jugador1[1] === 'cara');
     $ganaJugador2 = ($jugador2[0] === 'cara' && $jugador2[1] === 'cara');
 
-    // Mostramos resultados
+    // Mostramos los resultados
     echo "<h2>Tirada de los jugadores:</h2>";
-    echo "<p>Jugador 1: " . $jugador1[0] . " y " . $jugador1[1] . "</p>";
-    echo "<p>Jugador 2: " . $jugador2[0] . " y " . $jugador2[1] . "</p>";
+    echo "<p>Jugador 1: ";
+    echo "<img src='img/{$jugador1[0]}.png' alt='{$jugador1[0]}' class='moneda'>";
+    echo " y ";
+    echo "<img src='img/{$jugador1[1]}.png' alt='{$jugador1[1]}' class='moneda'>";
+    echo "</p>";
+
+    echo "<p>Jugador 2: ";
+    echo "<img src='img/{$jugador2[0]}.png' alt='{$jugador2[0]}' class='moneda'>";
+    echo " y ";
+    echo "<img src='img/{$jugador2[1]}.png' alt='{$jugador2[1]}' class='moneda'>";
+    echo "</p>";
 
     echo "<div class='resultado'>";
     if ($ganaJugador1 && $ganaJugador2) {
@@ -88,12 +101,13 @@
         echo "<p class='ganador'>¡El jugador 2 ha ganado con dos caras!</p>";
     } else {
         echo "<p class='perdedor'>Ningún jugador ha ganado. Intenta de nuevo.</p>";
-
-        // Mostrar botón para recargar la página y volver a jugar
-        echo "<form method='post'>";
-        echo "<button type='submit'>Volver a tirar</button>";
-        echo "</form>";
     }
+
+    // Mostramos el botón para recargar la página y volver a jugar
+    echo "<form method='post'>";
+    echo "<button type='submit'>Volver a tirar</button>";
+    echo "</form>";
+    
     echo "</div>";
     ?>
 </div>
