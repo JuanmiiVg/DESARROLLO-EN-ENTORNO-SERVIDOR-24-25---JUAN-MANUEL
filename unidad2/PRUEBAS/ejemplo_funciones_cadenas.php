@@ -12,6 +12,7 @@
     {
         //Vamos a usar contador para saber cuantas palabras hemos encontrado
         $contador=0;
+        
         //Ponemos a -1 la primera posición para que pueda encontrar una palabra en la que 
         //empiece al principio, ya que la primera ocurrencia empieza en 0
         //Si no encuentra la palabra indica que no hay hasta esa ocurrencia/repitición
