@@ -2,88 +2,75 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario PHP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Formulario de Operaciones Matemáticas</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Formulario de Operaciones Matemáticas</h1>
-        <form action="index.php" method="post" class="mt-4">
-            <div class="mb-3">
-                <label for="limite" class="form-label">Límite (1 a 10):</label>
-                <input type="range" class="form-range" id="limite" name="limite" min="1" max="10">
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="media" name="media">
-                <label class="form-check-label" for="media">Media</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="sucesion" name="sucesion">
-                <label class="form-check-label" for="sucesion">Sucesión Aritmética</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" id="factorial" name="factorial">
-                <label class="form-check-label" for="factorial">Factorial</label>
-            </div>
-            <div class="mb-3">
-                <label for="datos" class="form-label">Datos (tres líneas con valores separados por comas):</label>
-                <textarea class="form-control" id="datos" name="datos" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Enviar</button>
-        </form>
-    </div>
+<div class="container mt-5">
+    <h2 class="text-center">Formulario de Operaciones Matemáticas</h2>
+    <form method="POST" action="">
+        <div class="form-group">
+            <label for="limite">Límite (1-10):</label>
+            <input type="range" id="limite" name="limite" min="1" max="10">
+        </div>
+        <div class="form-group">
+            <label>Opciones:</label><br>
+            <input type="checkbox" name="opciones[]" value="media"> Media
+            <input type="checkbox" name="opciones[]" value="sucesion"> Sucesión Aritmética
+            <input type="checkbox" name="opciones[]" value="factorial"> Factorial
+        </div>
+        <div class="form-group">
+            <label for="textarea">Ingrese los datos separados por comas:</label>
+            <textarea id="textarea" name="textarea" rows="3" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Calcular</button>
+    </form>
 
     <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include 'lib/funciones.php';
+if ($_POST) {
+    require_once 'lib/funciones.php';
 
-    $limite = intval($_POST['limite']);
-    $mediaCheck = isset($_POST['media']);
-    $sucesionCheck = isset($_POST['sucesion']);
-    $factorialCheck = isset($_POST['factorial']);
-    $datos = explode("\n", trim($_POST['datos']));
+    // Leemos los datos
+    $limite = (int)$_POST['limite'];
+    $opciones = $_POST['opciones'] ?? [];
+    $textarea = explode("\n", trim($_POST['textarea']));
 
-    $resultado = [];
+    // Procesamos los datos del textarea
+    $enteros = array_map('intval', explode(',', $textarea[0] ?? ''));
+    $floats = array_map('floatval', explode(',', $textarea[1] ?? ''));
+    $strings = explode(',', $textarea[2] ?? '');
 
-    // Convertimos cada línea del textarea en un array de datos separados por comas
-    $lineas = array_map(fn($linea) => array_map('trim', explode(',', $linea)), $datos);
+    // Array con los resultados
+    $resultados = [];
 
-    // 1. Suma de enteros y floats, y su total
-    $resultado['suma_enteros'] = sumaEnteros($lineas);
-    $resultado['suma_floats'] = sumaFloats($lineas);
-    $resultado['suma_total'] = $resultado['suma_enteros'] + $resultado['suma_floats'];
+    // Hacemos la suma de enteros, floats y la suma total
+    $resultados['Suma Enteros'] = sumaEnteros($enteros);
+    $resultados['Suma Floats'] = sumaFloats($floats);
+    $resultados['Suma Total'] = sumaTotal($enteros, $floats);
 
-    // 2. Media de los números
-    if ($mediaCheck) {
-        $resultado['media'] = calcularMedia($lineas);
+    // Opciones a elegir
+    if (in_array('media', $opciones)) {
+        $resultados['Media'] = calcularMedia([...$enteros, ...$floats]);
+    }
+    if (in_array('sucesion', $opciones)) {
+        $resultados['Sucesión Aritmética'] = sucesionAritmetica($limite);
+    }
+    if (in_array('factorial', $opciones)) {
+        $resultados['Factorial'] = calcularFactorial($enteros, $limite);
     }
 
-    // 3. Sucesión aritmética
-    if ($sucesionCheck) {
-        $resultado['sucesion'] = generarSucesion($limite);
-    }
+    // Buscamos la palabra más larga
+    $resultados['Palabra más Larga'] = palabraMasLarga($strings);
 
-    // 4. Factorial de la posición o del valor del range
-    if ($factorialCheck) {
-        $resultado['factorial'] = calcularFactorial($lineas, $limite);
-    }
-
-    // 5. Palabra más larga de la última línea
-    $resultado['palabra_mas_larga'] = palabraMasLarga($lineas);
-
-    // Mostrar resultados en una tabla
-    echo '<div class="container mt-5"><table class="table table-bordered"><thead><tr><th>Clave</th><th>Valor</th></tr></thead><tbody>';
-    foreach ($resultado as $clave => $valor) {
-        // Si el valor es un array, lo convertimos en una cadena separada por comas
-        if (is_array($valor)) {
-            $valor = implode(', ', $valor);
-        }
+    // Mostramos los resultados en la tabla
+    echo "<table class='table table-bordered mt-4'><thead><tr><th>Clave</th><th>Valor</th></tr></thead><tbody>";
+    foreach ($resultados as $clave => $valor) {
         echo "<tr><td>{$clave}</td><td>{$valor}</td></tr>";
     }
-    echo '</tbody></table></div>';
+    echo "</tbody></table>";
 }
 ?>
 
+</div>
 </body>
 </html>

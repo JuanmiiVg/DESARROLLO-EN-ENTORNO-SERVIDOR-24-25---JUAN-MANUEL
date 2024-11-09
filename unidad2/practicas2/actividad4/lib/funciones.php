@@ -1,65 +1,52 @@
 <?php
-// Suma de enteros
-function sumaEnteros(array $datos) {
-    $suma = 0;
-    foreach ($datos as $linea) {
-        foreach ($linea as $valor) {
-            if (is_int($valor + 0)) {
-                $suma += (int)$valor;
-            }
+// Función de suma de enteros
+function sumaEnteros($enteros) {
+    return array_sum($enteros);
+}
+
+// Función de suma de floats
+function sumaFloats(array &$floats) {
+    return array_sum($floats);
+}
+
+// Función total de enteros y floats
+function sumaTotal($enteros, $floats) {
+    return sumaEnteros($enteros) + sumaFloats($floats);
+}
+
+// Función para calcular la media de los datos
+function calcularMedia($datos) {
+    $total = array_sum($datos);
+    return $total / count($datos);
+}
+
+// Función para calcular la sucesión aritmética
+function sucesionAritmetica($limite) {
+    $sucesion = [];
+    for ($i = 0; $i < 10; $i++) {
+        $sucesion[] = $limite + $i;
+    }
+    return implode(", ", $sucesion);
+}
+
+// Función para calcular el factorial
+function calcularFactorial($enteros, $limite) {
+    $num = $enteros[$limite - 1] ?? $limite;
+    $factorial = 1;
+    for ($i = 1; $i <= $num; $i++) {
+        $factorial *= $i;
+    }
+    return $factorial;
+}
+
+// Función de contar la palabra más larga
+function palabraMasLarga($strings) {
+    $palabraLarga = '';
+    foreach ($strings as $palabra) {
+        if (strlen($palabra) > strlen($palabraLarga)) {
+            $palabraLarga = $palabra;
         }
     }
-    return $suma;
-}
-
-// Suma de floats
-function sumaFloats($datos) {
-    $suma = 0.0;
-    foreach ($datos as $linea) {
-        foreach ($linea as $valor) {
-            if (is_float($valor + 0)) {
-                $suma += (float)$valor;
-            }
-        }
-    }
-    return $suma;
-}
-
-// Calcular media
-function calcularMedia(&$datos) {
-    $suma = 0;
-    $contador = 0;
-    foreach ($datos as $linea) {
-        foreach ($linea as $valor) {
-            if (is_numeric($valor)) {
-                $suma += $valor;
-                $contador++;
-            }
-        }
-    }
-    return $contador > 0 ? $suma / $contador : 0;
-}
-
-// Generar sucesión aritmética
-function generarSucesion($inicio) {
-    return array_map(fn($i) => $inicio + $i, range(0, 9));
-}
-
-// Calcular factorial
-function calcularFactorial(array $datos, $posicion) {
-    $numero = $datos[$posicion - 1][0] ?? $posicion;
-    return array_product(range(1, $numero));
-}
-
-// Encontrar palabra más larga en la última línea
-function palabraMasLarga($datos) {
-    $ultimaLinea = $datos[count($datos) - 1];
-    $palabraMasLarga = '';
-    foreach ($ultimaLinea as $palabra) {
-        if (strlen($palabra) > strlen($palabraMasLarga)) {
-            $palabraMasLarga = $palabra;
-        }
-    }
-    return $palabraMasLarga;
+    return trim($palabraLarga);
 }
 ?>
