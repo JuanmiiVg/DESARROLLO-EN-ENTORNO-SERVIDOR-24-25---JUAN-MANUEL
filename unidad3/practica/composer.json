@@ -1,0 +1,17 @@
+{
+    "name": "daw/practica",
+    "autoload": {
+        "psr-4": {
+            "Daw\\Practica\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Juanma",
+            "email": "juanmavegacarrillo@gmail.com"
+        }
+    ],
+    "require": {
+        "nikic/fast-route": "^1.3"
+    }
+}
