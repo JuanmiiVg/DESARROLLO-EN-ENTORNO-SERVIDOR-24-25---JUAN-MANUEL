@@ -1,0 +1,16 @@
+# This file is used for URL rewriting and configuring server settings.
+
+RewriteEngine On
+
+# Redirect to the public directory
+RewriteRule ^$ public/index.php [L]
+RewriteRule (.*) public/$1 [L]
+
+# Handle 404 errors
+ErrorDocument 404 /public/index.php
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|json|md)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

@@ -49,28 +49,14 @@ class EntrenadorController
 
     public function edit($vars)
     {
-        // Obtener el entrenador y cargar la vista de edición
         $entrenador = $this->modelo->obtenerPorId($vars['id']);
-        if ($entrenador) {
-            render('entrenadores/editar', compact('entrenador'));
-        } else {
-            echo "Entrenador no encontrado.";
-        }
+        render('entrenadores/editar', compact('entrenador'));
     }
 
     public function update($vars)
     {
-        // Validar los datos enviados desde el formulario
-        if (isset($_POST['nombre'], $_POST['experiencia'])) {
-            $nombre = trim($_POST['nombre']);
-            $experiencia = trim($_POST['experiencia']);
-
-            // Actualizar los datos del entrenador
-            $this->modelo->actualizar($vars['id'], $nombre, $experiencia);
-            redirect('/entrenadores'); // Redirigir a la lista de entrenadores
-        } else {
-            echo "Faltan datos para actualizar.";
-        }
+        $this->modelo->actualizar($vars['id'], $_POST['nombre'], $_POST['experiencia']);
+        redirect('/entrenadores');
     }
 
     public function delete($vars)
