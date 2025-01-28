@@ -8,29 +8,29 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h1 class="text-center">Lista de Usuarios</h1>
-    <a href="/usuarios/crear" class="btn btn-success mb-3">Agregar Nuevo Usuario</a>
+    <h1 class="text-center">Listar Animales</h1>
+    <a href="/animales/crear" class="btn btn-success mb-3">Agregar Nuevo Animal</a>
 
     <table class="table table-bordered">
         <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Correo</th>
-            <th>Fecha de Registro</th>
+            <th>Especie</th>
+            <th>Edad</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($usuarios as $usuario): ?>
+        <?php foreach ($animales as $animal): ?>
             <tr>
-                <td><?= $usuario['id_usuario'] ?></td>
-                <td><?= $usuario['nombre_usuario'] ?></td>
-                <td><?= $usuario['correo'] ?></td>
-                <td><?= $usuario['fecha_registro'] ?></td>
+                <td><?= $animal['id_animal'] ?></td>
+                <td><?= $animal['nombre'] ?></td>
+                <td><?= $animal['especie'] ?></td>
+                <td><?= $animal['edad'] ?></td>
                 <td>
-                    <a href="/usuarios/<?= $usuario['id_usuario'] ?>" class="btn btn-info btn-sm">Ver</a>
-                    <a href="/usuarios/<?= $usuario['id_usuario'] ?>/editar" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="/usuarios/<?= $usuario['id_usuario'] ?>/eliminar" class="btn btn-danger btn-sm">Eliminar</a>
+                    <a href="/animales/<?= $animal['id_animal'] ?>" class="btn btn-info btn-sm">Ver</a>
+                    <a href="/animales/<?= $animal['id_animal'] ?>/editar" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/animales/<?= $animal['id_animal'] ?>/eliminar" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
