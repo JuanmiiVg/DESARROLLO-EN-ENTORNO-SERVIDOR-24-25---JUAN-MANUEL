@@ -1,39 +1,21 @@
 <?php
 
-require_once __DIR__ . '/../models/Imagen.php';
+require_once 'libs/conexion.php';
+require_once 'models/Imagen.php';
 
 class ImagenController
 {
-    private $modeloImagen;
+    private $imagenModel;
 
     public function __construct()
     {
-        $this->modeloImagen = new Imagen();
+        $conexion = new Conexion();
+        $this->imagenModel = new Imagen($conexion);
     }
 
-    // Listar imágenes de una publicación
-    public function listarPorPublicacion($idPublicacion)
+    public function obtenerImagenesPorPublicacion($idPublicacion)
     {
-        return $this->modeloImagen->obtenerPorPublicacion($idPublicacion);
-    }
-
-    // Insertar una nueva imagen
-    public function insertar($idPublicacion, $nombreArchivo)
-    {
-        if ($this->modeloImagen->insertarImagen($idPublicacion, $nombreArchivo)) {
-            header('Location: /publicacion/detalle.php?id=' . $idPublicacion);
-        } else {
-            die("Error al insertar la imagen.");
-        }
-    }
-
-    // Eliminar una imagen
-    public function eliminar($idImagen, $idPublicacion)
-    {
-        if ($this->modeloImagen->eliminarImagen($idImagen)) {
-            header('Location: /publicacion/detalle.php?id=' . $idPublicacion);
-        } else {
-            die("Error al eliminar la imagen.");
-        }
+        $imagenes = $this->imagenModel->obtenerPorPublicacion($idPublicacion);
+        include 'views/imagenes/listar.php'; // Cargar la vista con las imágenes
     }
 }

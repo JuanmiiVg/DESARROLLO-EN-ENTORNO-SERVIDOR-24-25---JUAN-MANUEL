@@ -1,66 +1,28 @@
 <?php
 
-require_once __DIR__ . '/../models/Publicacion.php';
-require_once __DIR__ . '/../models/Imagen.php';
+require_once 'libs/conexion.php';
+require_once 'models/Publicacion.php';
 
 class PublicacionController
 {
-    private $modeloPublicacion;
-    private $modeloImagen;
+    private $publicacionModel;
 
     public function __construct()
     {
-        $this->modeloPublicacion = new Publicacion();
-        $this->modeloImagen = new Imagen();
+        $conexion = new Conexion();
+        $this->publicacionModel = new Publicacion($conexion);
     }
 
-    // Listar todas las publicaciones con paginación
-    public function listar($pagina = 1, $porPagina = 10)
+    public function listarPublicaciones($pagina = 1, $porPagina = 10)
     {
         $offset = ($pagina - 1) * $porPagina;
-        return $this->modeloPublicacion->obtenerPublicaciones($porPagina, $offset);
+        $publicaciones = $this->publicacionModel->obtenerPublicaciones($porPagina, $offset);
+        include 'views/publicaciones/listar.php'; // Cargar la vista con los datos
     }
 
-    // Mostrar detalle de una publicación
-    public function detalle($id)
+    public function detallePublicacion($id)
     {
-        $publicacion = $this->modeloPublicacion->obtenerPorId($id);
-        if ($publicacion) {
-            $imagenes = $this->modeloImagen->obtenerPorPublicacion($id);
-            return ['publicacion' => $publicacion, 'imagenes' => $imagenes];
-        } else {
-            die("La publicación no existe.");
-        }
-    }
-
-    // Insertar una nueva publicación
-    public function insertar($titulo, $contenido)
-    {
-        $id = $this->modeloPublicacion->insertarPublicacion($titulo, $contenido);
-        if ($id) {
-            header('Location: /publicacion/lista.php');
-        } else {
-            die("Error al insertar la publicación.");
-        }
-    }
-
-    // Modificar una publicación
-    public function modificar($id, $titulo, $contenido)
-    {
-        if ($this->modeloPublicacion->modificarPublicacion($id, $titulo, $contenido)) {
-            header('Location: /publicacion/lista.php');
-        } else {
-            die("Error al modificar la publicación.");
-        }
-    }
-
-    // Eliminar una publicación
-    public function eliminar($id)
-    {
-        if ($this->modeloPublicacion->eliminarPublicacion($id)) {
-            header('Location: /publicacion/lista.php');
-        } else {
-            die("Error al eliminar la publicación.");
-        }
+        $publicacion = $this->publicacionModel->obtenerPorId($id);
+        include 'views/publicaciones/detalle.php'; // Cargar la vista con los datos
     }
 }
