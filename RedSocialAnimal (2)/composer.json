@@ -1,0 +1,19 @@
+{
+    "name": "juanm/red-social-animal2",
+    "autoload": {
+        "psr-4": {
+            "Juanm\\RedSocialAnimal2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "JuanmiiVg",
+            "email": "146075100+JuanmiiVg@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "nikic/fast-route": "^1.3",
+        "phanda-framework/dotenv": "^0.1.2",
+        "vlucas/phpdotenv": "^2.6"
+    }
+}
