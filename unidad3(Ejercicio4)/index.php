@@ -5,31 +5,48 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use FastRoute\RouteCollector;
 //use utils\Utils;
-use App\Controlador\usuarioController;
+use App\Controlador\EntrenadorController;
 use Dotenv\Dotenv;
 use Kint\Kint;
 //use Model\Model;
-//use Models\usuario;
-use App\Model\usuario;
+//use Models\Entrenador;
+use App\Model\Entrenador;
 
 // Inicializa dotenv para cargar las variables de entorno
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
+$entranador= new App\Controlador\EntrenadorController();
+
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
 
+    //Nos conectamos a la base de datos
+
+    //Ejemplo de uso creando una funcion
+ /*   $r->addRoute('GET', '/', function () {
+       
+        $con = Utils::getConnection(Utils::$dsn, Utils::$user, Utils::$password);
+    
+        $entrenadorM = new Entrenador($con);
+        $entrenadores = $entrenadorM->cargarTodoPaginado(1,10);
+        include __DIR__ . '/view/index.php';
+
+    });
+*/
 //Con addroute voy añadiendo rutas url por get o por post a las que responderemos
 //Las que no esten aquí darán fallo
-//Listado de usuarioes
-$r->addRoute('GET', '/', ['App\Controlador\usuarioController', 'mostrarusuarios']);
-$r->addRoute('GET', '/listausuarios/{pagina:\d+}', ['App\Controlador\usuarioController', 'mostrarusuarios']);
-$r->addRoute('POST', '/', ['App\Controlador\usuarioController', 'mostrarusuariosFiltrado']);
-//Mostrar detalle de usuario
-$r->addRoute('GET', '/usuarioes/{id:\d+}', ['App\Controlador\usuarioController', 'mostrarusuario']);
-$r->addRoute('GET','/usuarioes/crear',['App\Controlador\usuarioController', 'crearusuario']);
-$r->addRoute('POST','/usuarioes/crear',['App\Controlador\usuarioController', 'insertarusuario']);
-$r->addRoute('GET','/usuarioes/{id:\d+}/eliminar',['App\Controlador\usuarioController', 'eliminarusuario']);
+//Listado de entrenadores
+$r->addRoute('GET', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
+$r->addRoute('GET', '/listaEntrenadores/{pagina:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
+$r->addRoute('POST', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadoresFiltrado']);
+//Mostrar detalle de entrenador
+$r->addRoute('GET', '/entrenadores/{id:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenador']);
+$r->addRoute('GET','/entrenadores/crear',['App\Controlador\EntrenadorController', 'crearEntrenador']);
+$r->addRoute('POST','/entrenadores/crear',['App\Controlador\EntrenadorController', 'insertarEntrenador']);
+$r->addRoute('GET','/entrenadores/{id:\d+}/eliminar',['App\Controlador\EntrenadorController', 'eliminarEntrenador']);
 
+$r->addRoute('GET','/entrenadores/{id:\d+}/editar',['App\Controlador\EntrenadorController', 'editarEntrenador']);
+$r->addRoute('POST','/entrenadores/editar',['App\Controlador\EntrenadorController', 'modificarEntrenador']);
 });
 
 //Dependiendo de la solicitud haremos una cosa u otra 

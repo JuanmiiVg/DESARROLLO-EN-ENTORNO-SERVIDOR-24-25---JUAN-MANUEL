@@ -74,9 +74,25 @@ class EntrenadorController
        Utils::redirect('/');
     }
 
+    public function editarEntrenador($id)
+    {
+        Utils::render('editar',$id);
+    }
+
+    public function modificarEntrenador()
+    {
+        $datos = $_POST;
+
+        // Nos conectamos a la bd
+        $con = Utils::getConnection();
+        // Creamos el modelo
+        $entrenadorM = new Entrenador($con);
+        // Modificamos el animal
+        $entrenadorM->modificar($datos);
+        // Redirigimos a la vista principal
+        Utils::redirect('/');
+    }
+
 }
-
-
-
 
 ?>

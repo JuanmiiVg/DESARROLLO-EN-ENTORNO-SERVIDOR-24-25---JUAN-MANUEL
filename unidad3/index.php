@@ -16,7 +16,6 @@ $animal= new App\Controlador\AnimalController();
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
 
 //Con addroute voy añadiendo rutas url por get o por post a las que responderemos
-//Las que no esten aquí darán fallo
 $r->addRoute('GET', '/', ['App\Controlador\UsuarioController', 'cargarLogin']);
 $r->addRoute('POST', '/', ['App\Controlador\UsuarioController', 'login']);
 $r->addRoute('GET', '/registro', ['App\Controlador\UsuarioController', 'cargarRegistro']);
@@ -27,7 +26,7 @@ $r->addRoute('GET', '/verify', ['App\Controlador\UsuarioController', 'verificarC
 
 $r->addRoute('GET', '/listaAnimales/{pagina:\d+}', ['App\Controlador\AnimalController', 'mostrarAnimales']);
 
-//Mostrar detalle de entrenador
+//Mostrar detalle
 $r->addRoute('GET', '/animales/{id:\d+}', ['App\Controlador\AnimalController', 'mostrarAnimal']);
 $r->addRoute('GET','/animales/crear',['App\Controlador\AnimalController', 'crearAnimal']);
 $r->addRoute('POST','/animales/crear',['App\Controlador\AnimalController', 'insertarAnimal']);
@@ -36,8 +35,7 @@ $r->addRoute('GET','/animales/{id:\d+}/modificar',['App\Controlador\AnimalContro
 $r->addRoute('POST','/animales/modificar',['App\Controlador\AnimalController', 'modificarAnimal']);
 });
 
-//Dependiendo de la solicitud haremos una cosa u otra 
-//recomemos la url y si ha sido get post o cual
+
 // Obtener datos de la solicitud
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -69,8 +67,7 @@ switch ($routeInfo[0]) {
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         //Asignacion doble de variables que se reciben desde un array seria igual a las dos siguientes lineas
-        //$class=$handler[0];
-        //$method=$handler[1];
+
         [$class, $method] = $handler;
         $controller = new $class();
        

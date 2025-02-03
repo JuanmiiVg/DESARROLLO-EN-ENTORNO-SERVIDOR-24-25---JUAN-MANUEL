@@ -171,38 +171,47 @@ class Model
         }
     }
 
-/*
-    function modificarTodo($entrenador)
+    function modificar($datos)
     {
         try {
-
-            //Si viene el identrenador sigo adelante
-            if (isset($entrenador['idEntrenador'])) {
-                //Vamos a hacer un ejemplo en el cual borramos el entrenador numero 4
-                $sql = "UPDATE `puertobaloncesto`.`entrenador` SET  `nif`= :nif , `nombre`= :nombre, `edad`=:edad, `altura`=:altura WHERE idEntrenador = :idEntrenador";
-
-                //Utilizamos la conexion activa de nuestro objeto
-                //Para crear la sentencia sql
-                $stmt = $this->con->prepare($sql);
-
-                //Ejecutamos la sentencia substituyendo las interrogacions por los valores
-                //Que metemos dentro del array que le pasamos a execute
-                $resultado = $stmt->execute([
-                    ":idEntrenador" => $entrenador['idEntrenador'],
-                    ":nif" => $entrenador['nif'],
-                    ":nombre" => $entrenador['nombre'],
-                    ":edad" => $entrenador['edad'],
-                    ":altura" => $entrenador['altura']
-                ]);
-
-                //Devolvemos el resultado de la ejecucion de la sentencia
-                return $resultado;
-            } else return false;
+            // Generamos la sentencia SQL para la actualización
+            $sql = "UPDATE $this->table SET ";
+    
+            // Sacamos las claves que corresponden con los nombres de los campos
+            $campos = array_keys($datos);
+    
+            // Añadimos los nombres de los campos con sus respectivos parámetros
+            for ($i = 0; $i < count($campos)-1; $i++) {
+                if ($i < count($campos) - 2)
+                    $sql .= "$campos[$i] = :$campos[$i], ";
+                else
+                    $sql .= "$campos[$i] = :$campos[$i] ";
+            }
+    
+            // Agregamos la condición WHERE para identificar el registro a modificar
+            $sql .= "WHERE id".$this->table." = :id";
+    
+            // Preparamos la consulta
+            $stmt = $this->con->prepare($sql);
+            echo $stmt->queryString;
+            // Enlazamos los valores de los parámetros
+            foreach ($datos as $campo => $valor) {
+                $tipo = Utils::obtenerTipoParametro($valor);
+                $stmt->bindValue(':' . $campo, $valor, $tipo);
+            }
+            
+            // Enlazamos el ID con el tipo de parámetro adecuado
+            
+            
+            // Ejecutamos la consulta
+            $resultado = $stmt->execute($datos);
+    
+            // Devolvemos el resultado de la ejecución de la sentencia
+            return $resultado;
         } catch (PDOException $e) {
-            //Hubo un problema al eliminar el registro
-            echo 'Hubo un problema al insertar el registro: ' . $e->getMessage();
+            // Hubo un problema al modificar el registro
+            echo 'Hubo un problema al modificar el registro: ' . $e->getMessage();
             return false;
         }
     }
-        */
 }
