@@ -17,10 +17,16 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
 
 //Con addroute voy añadiendo rutas url por get o por post a las que responderemos
 //Las que no esten aquí darán fallo
-//Listado de entrenadores
-$r->addRoute('GET', '/', ['App\Controlador\AnimalController', 'mostrarAnimales']);
+$r->addRoute('GET', '/', ['App\Controlador\UsuarioController', 'cargarLogin']);
+$r->addRoute('POST', '/', ['App\Controlador\UsuarioController', 'login']);
+$r->addRoute('GET', '/registro', ['App\Controlador\UsuarioController', 'cargarRegistro']);
+$r->addRoute('POST', '/registro', ['App\Controlador\UsuarioController', 'registro']);
+$r->addRoute('GET', '/logout', ['App\Controlador\UsuarioController', 'logout']);
+
+$r->addRoute('GET', '/verify', ['App\Controlador\UsuarioController', 'verificarCuenta']);
+
 $r->addRoute('GET', '/listaAnimales/{pagina:\d+}', ['App\Controlador\AnimalController', 'mostrarAnimales']);
-$r->addRoute('POST', '/', ['App\Controlador\AnimalController', 'mostrarAnimalesFiltrado']);
+
 //Mostrar detalle de entrenador
 $r->addRoute('GET', '/animales/{id:\d+}', ['App\Controlador\AnimalController', 'mostrarAnimal']);
 $r->addRoute('GET','/animales/crear',['App\Controlador\AnimalController', 'crearAnimal']);

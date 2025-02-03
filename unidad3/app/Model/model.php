@@ -22,6 +22,32 @@ class Model
         if ($con != null && $this->con==null) $this->con = $con;
     }
 
+    function contarAnimales (){
+        try {
+            //query que muestra de forma paginada los datos
+            $sql = "select count(*) as total from $this->table";
+
+            //Utilizamos la conexion activa de nuestro objeto
+            //Para crear la sentencia sql
+            $stmt = $this->con->prepare($sql);
+
+            //Asignamos la forma de devolver los datos
+
+
+            //Ejecutamos la sentencia substituyendo las interrogacions por los valores
+            $stmt->execute();
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $resultado ["total"];
+            
+
+    }
+    catch (PDOException $e) {
+        //Hubo un problema al eliminar el registro
+        echo 'Hubo un problema al eliminar el registro: ' . $e->getMessage();
+        return false;
+    }
+}
+
     function cargar($id)
     {
         try {
@@ -145,10 +171,6 @@ class Model
             //Utilizamos la conexion activa de nuestro objeto
             //Para crear la sentencia sql
             $stmt = $this->con->prepare($sql);
-
-            echo $stmt->queryString;
-
-            
 
             //Ejecutamos la sentencia substituyendo las interrogacions por los valores
             //Que metemos dentro del array que le pasamos a execute

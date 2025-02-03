@@ -9,17 +9,20 @@ use App\Model\raza;
 class AnimalController
 {
 
-    public function mostrarAnimales()
+    public function mostrarAnimales($datos)
     {
         //Nos conectamos a la bd
         $con = Utils::getConnection();
         //Creamos el modelo
         $animalM = new Animal($con);
         //Cargamos los entrenadores
-        $animales = $animalM->cargarTodoPaginado(1,200);
+        $animales = $animalM->cargarTodoPaginado($datos ["pagina"],10);
+        $pagina = $datos ["pagina"];
+        $totalAnimales = $animalM->contarAnimales();
+        $totalPaginas = ceil($totalAnimales/10);
         //Compactamos los datos que necesita la vista para luego pasarselos
-        $datos = compact("animales");
-
+        $datos = compact("animales","pagina","totalPaginas");
+        
         
         //Cargamos la vista
        Utils::render('listaAnimales',$datos);
@@ -88,7 +91,7 @@ class AnimalController
         $animalM->insertar($animal);
     
         // Redirigimos
-        Utils::redirect('/');
+        Utils::redirect('/listaAnimales/1');
     }
     
 
@@ -102,7 +105,7 @@ class AnimalController
        //borramos el entrenador
        $animalM->borrar($datos['id']);
        //Cargamos la vista
-       Utils::redirect('/');
+       Utils::redirect('/listaAnimales/1');
     }
 
     public function modificarAnimal()
@@ -140,7 +143,7 @@ class AnimalController
         // Modificamos el animal
         $animalM->modificar($datos);
         // Redirigimos a la vista principal
-        Utils::redirect('/');
+        Utils::redirect('/listaAnimales/1');
     }
 
     public function editarAnimal($id)

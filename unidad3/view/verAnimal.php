@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+    include_once 'auth.php';
+    ?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +67,7 @@
         </table>
     </div>
 
-    <a href="/" class="btn btn-secondary">Volver al listado</a>
+    <a href="/listaAnimales/1" class="btn btn-secondary">Volver al listado</a>
 </div>
 </body>
 </html>
