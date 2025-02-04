@@ -5,50 +5,37 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use FastRoute\RouteCollector;
 //use utils\Utils;
-use App\Controlador\EntrenadorController;
 use Dotenv\Dotenv;
-use Kint\Kint;
-//use Model\Model;
-//use Models\Entrenador;
-use App\Model\Entrenador;
 
 // Inicializa dotenv para cargar las variables de entorno
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$entranador= new App\Controlador\EntrenadorController();
+$animal= new App\Controlador\AnimalController();
 
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
 
-    //Nos conectamos a la base de datos
-
-    //Ejemplo de uso creando una funcion
- /*   $r->addRoute('GET', '/', function () {
-       
-        $con = Utils::getConnection(Utils::$dsn, Utils::$user, Utils::$password);
-    
-        $entrenadorM = new Entrenador($con);
-        $entrenadores = $entrenadorM->cargarTodoPaginado(1,10);
-        include __DIR__ . '/view/index.php';
-
-    });
-*/
 //Con addroute voy añadiendo rutas url por get o por post a las que responderemos
-//Las que no esten aquí darán fallo
-//Listado de entrenadores
-$r->addRoute('GET', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
-$r->addRoute('GET', '/listaEntrenadores/{pagina:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
-$r->addRoute('POST', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadoresFiltrado']);
-//Mostrar detalle de entrenador
-$r->addRoute('GET', '/entrenadores/{id:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenador']);
-$r->addRoute('GET','/entrenadores/crear',['App\Controlador\EntrenadorController', 'crearEntrenador']);
-$r->addRoute('POST','/entrenadores/crear',['App\Controlador\EntrenadorController', 'insertarEntrenador']);
-$r->addRoute('GET','/entrenadores/{id:\d+}/eliminar',['App\Controlador\EntrenadorController', 'eliminarEntrenador']);
+$r->addRoute('GET', '/', ['App\Controlador\UsuarioController', 'cargarLogin']);
+$r->addRoute('POST', '/', ['App\Controlador\UsuarioController', 'login']);
+$r->addRoute('GET', '/registro', ['App\Controlador\UsuarioController', 'cargarRegistro']);
+$r->addRoute('POST', '/registro', ['App\Controlador\UsuarioController', 'registro']);
+$r->addRoute('GET', '/logout', ['App\Controlador\UsuarioController', 'logout']);
 
+$r->addRoute('GET', '/verify', ['App\Controlador\UsuarioController', 'verificarCuenta']);
+
+$r->addRoute('GET', '/listaAnimales/{pagina:\d+}', ['App\Controlador\AnimalController', 'mostrarAnimales']);
+
+//Mostrar detalle
+$r->addRoute('GET', '/animales/{id:\d+}', ['App\Controlador\AnimalController', 'mostrarAnimal']);
+$r->addRoute('GET','/animales/crear',['App\Controlador\AnimalController', 'crearAnimal']);
+$r->addRoute('POST','/animales/crear',['App\Controlador\AnimalController', 'insertarAnimal']);
+$r->addRoute('GET','/animales/{id:\d+}/eliminar',['App\Controlador\AnimalController', 'eliminarAnimal']);
+$r->addRoute('GET','/animales/{id:\d+}/modificar',['App\Controlador\AnimalController', 'editarAnimal']);
+$r->addRoute('POST','/animales/modificar',['App\Controlador\AnimalController', 'modificarAnimal']);
 });
 
-//Dependiendo de la solicitud haremos una cosa u otra 
-//recomemos la url y si ha sido get post o cual
+
 // Obtener datos de la solicitud
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -80,8 +67,7 @@ switch ($routeInfo[0]) {
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         //Asignacion doble de variables que se reciben desde un array seria igual a las dos siguientes lineas
-        //$class=$handler[0];
-        //$method=$handler[1];
+
         [$class, $method] = $handler;
         $controller = new $class();
        
