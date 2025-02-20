@@ -4,6 +4,7 @@ namespace App\Controlador;
 
 use App\Utils\Utils;
 use App\Model\Equipo;
+use APP\Model\Jugador;
 
 class EquipoController
 {
@@ -92,4 +93,23 @@ class EquipoController
 
         Utils::redirect("/equipos?pagina=$pagina");
     }
+
+    public function listarEquiposEntrenador($datos)
+    {
+        $con = Utils::getConnection();
+        $equipoM = new Equipo($con);
+        $equipos = $equipoM->obtenerEquipos($datos['id']);
+
+        echo json_encode($equipos);
+    }
+
+    public function listarJugadoresEquipo($datos)
+    {
+        $con = Utils::getConnection();
+        $jugadorM = new Jugador($con);
+        $jugadores = $jugadorM->obtenerJugadoresPorEquipo($datos['id']);
+
+        echo json_encode($jugadores);
+    }
+
 }

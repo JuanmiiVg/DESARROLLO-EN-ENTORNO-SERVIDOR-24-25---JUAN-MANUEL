@@ -2,7 +2,11 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-
+/* Comandos  a seguir para la instalación : 
+composer init
+composer require vlucas/phpdotenv
+composer require nikic/fast-route
+composer dump-autoload */
 use FastRoute\RouteCollector;
 //use utils\Utils;
 use Dotenv\Dotenv;

@@ -20,6 +20,12 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/jugadores/{id:\d+}/modificar', ['App\Controlador\JugadorController', 'modificarJugador']);
     $r->addRoute('GET', '/jugadores/{id:\d+}/modificar', ['App\Controlador\JugadorController', 'mostrarModificarJugador']);
 
+    $r->addRoute('GET', '/jugadores/{id:\d+/traspaso}', ['App\Controlador\JugadorController', 'mostarTraspasoJugador']);
+    $r->addRoute('POST', '/jugadores/traspasar', ['App\Controlador\JugadorController', 'traspasarJugador']);
+    $r->addRoute('GET', '/jugadores/{id:\d+}/despedir', ['App\Controlador\JugadorController', 'despedirJugador']);
+    $r->addRoute('GET', '/jugadores/insertar', ['App\Controlador\JugadorController', ',mostarInsertarJugador']);
+    $r->addRoute('POST', '/jugadores/insertar', ['App\Controlador\JugadorController', 'insertarJugador']);
+
     // Rutas para entrenadores
     $r->addRoute('GET', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
     $r->addRoute('GET', '/entrenadores', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);

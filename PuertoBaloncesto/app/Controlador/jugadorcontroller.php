@@ -4,6 +4,7 @@ namespace App\Controlador;
 
 use App\Utils\Utils;
 use App\Model\Jugador;
+use App\Model\Equipo;
 
 class JugadorController
 {
@@ -90,5 +91,47 @@ class JugadorController
         $jugadorM->borrar($id);
 
         Utils::redirect("/jugadores?pagina=$pagina");
+    }
+
+    public function despedirJugador($datos)
+    {
+        $con = Utils::getConnection();
+        $jugadorM = new Jugador($con);
+        $jugadorM->despedir($datos['id']);
+
+        Utils::redirect("/entrenadores/detalle?id={$datos['entrenador_id']}");
+    }
+    
+    public function mostrarTraspasoJugador($datos)
+    {
+        $con = Utils::getConnection();
+        $equipoM = new equipo($con);
+        $equipos = $equipoM->cargarTodo();
+
+        $datos = compact("equipos", "jugador_id" => $datos['id']);
+        Utils::render('jugador/traspasoJugador',$datos);
+    }
+
+    public function traspasarJugador($datos)
+    {
+        $con  = Utils::getConnection();
+        $jugadorM = new Jugador($con);
+        $jugadorM->traspasar($datos['jugador_id'], $_POST['equipo_id']);
+
+        Utils::redirect("/entrenadores/detalle?id={$datos['entrenador_id']}");
+    }
+
+    public function mostarFormularioInsercion()
+    {
+        Utils::render("jugador/insertarJugador");
+    }
+
+    public function insertarJugador()
+    {
+        $con = Utils::getConnection();
+        $jugadorM = new Jugador($con);
+        $jugadorM->insertar($_POST);
+
+        Utils::redirect("/jugadores");
     }
 }
