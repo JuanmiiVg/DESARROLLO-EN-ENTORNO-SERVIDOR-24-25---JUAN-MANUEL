@@ -16,14 +16,14 @@ use App\Model\Entrenador;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$entranador= new App\Controlador\EntrenadorController();
+$entranador = new App\Controlador\EntrenadorController();
 
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
 
     //Nos conectamos a la base de datos
 
     //Ejemplo de uso creando una funcion
- /*   $r->addRoute('GET', '/', function () {
+    /*   $r->addRoute('GET', '/', function () {
        
         $con = Utils::getConnection(Utils::$dsn, Utils::$user, Utils::$password);
     
@@ -33,19 +33,23 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
 
     });
 */
-//Con addroute voy añadiendo rutas url por get o por post a las que responderemos
-//Las que no esten aquí darán fallo
-//Listado de entrenadores
-$r->addRoute('GET', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
-$r->addRoute('GET', '/listaEntrenadores/{pagina:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
-$r->addRoute('POST', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadoresFiltrado']);
-//Mostrar detalle de entrenador
-$r->addRoute('GET', '/entrenadores/{id:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenador']);
-$r->addRoute('POST', '/entrenadores/{idEntrenador:\d+}/equipo', ['App\Controlador\EntrenadorController', 'mostrarEntrenadorEquipos']);
-$r->addRoute('GET','/entrenadores/crear',['App\Controlador\EntrenadorController', 'crearEntrenador']);
-$r->addRoute('POST','/entrenadores/crear',['App\Controlador\EntrenadorController', 'insertarEntrenador']);
-$r->addRoute('GET','/entrenadores/{id:\d+}/eliminar',['App\Controlador\EntrenadorController', 'eliminarEntrenador']);
+    //Con addroute voy añadiendo rutas url por get o por post a las que responderemos
+    //Las que no esten aquí darán fallo
+    //Listado de entrenadores
+    $r->addRoute('GET', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
+    $r->addRoute('GET', '/listaEntrenadores/{pagina:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenadores']);
+    $r->addRoute('POST', '/', ['App\Controlador\EntrenadorController', 'mostrarEntrenadoresFiltrado']);
+    //Mostrar detalle de entrenador
+    $r->addRoute('GET', '/entrenadores/{id:\d+}', ['App\Controlador\EntrenadorController', 'mostrarEntrenador']);
+    $r->addRoute('POST', '/entrenadores/{idEntrenador:\d+}/equipo', ['App\Controlador\EntrenadorController', 'mostrarEntrenadorEquipos']);
+    $r->addRoute('GET', '/entrenadores/crear', ['App\Controlador\EntrenadorController', 'crearEntrenador']);
+    $r->addRoute('POST', '/entrenadores/crear', ['App\Controlador\EntrenadorController', 'insertarEntrenador']);
+    $r->addRoute('GET', '/entrenadores/{id:\d+}/eliminar', ['App\Controlador\EntrenadorController', 'eliminarEntrenador']);
 
+    $r->addRoute('GET', '/equipos', ['App\Controlador\EntrenadorController', 'listaEquipo']);
+    $r->addRoute('GET', '/equipos/{id:\d+}/eliminar', ['App\Controlador\EquipoController', 'eliminarEquipo']);
+    $r->addRoute('GET', '/equipos/{id:\d+}/cambiarCancha', ['App\Controlador\EquipoController', 'mostrarCambiarCancha']);
+    $r->addRoute('POST', '/equipos/{id:\d+}/cambiarCancha', ['App\Controlador\EquipoController', 'CambiarCancha']);
 });
 
 //Dependiendo de la solicitud haremos una cosa u otra 
@@ -69,14 +73,14 @@ switch ($routeInfo[0]) {
         http_response_code(404);
         echo "404 - Página no encontrada<br>Intentalo de nuevo";
         break;
-    
+
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         // Método HTTP no permitido
         $allowedMethods = $routeInfo[1];
         http_response_code(405);
         echo "405 - Método no permitido. Métodos permitidos: " . implode(', ', $allowedMethods);
         break;
-    
+
     case FastRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
@@ -85,7 +89,7 @@ switch ($routeInfo[0]) {
         //$method=$handler[1];
         [$class, $method] = $handler;
         $controller = new $class();
-       
+
         //Llamamos a la funcion encargada de despachar la ruta
         $controller->$method($vars);
         //call_user_func([$controller, $method], $vars);
